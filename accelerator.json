@@ -1,0 +1,72 @@
+{
+    "id": "f2ff3f29-6fca-49d2-a2e9-d7a751718d93",
+    "name": "Get Agent Utilization by Queue and Skill Data Action Module",
+    "description": "A Terraform/CX as Code remote module for the following Genesys Cloud public API operation: Get Agent Utilization by Queue and Skill",
+    "origin": "genesys",
+    "type": "module",
+    "classification": "Routing",
+    "tags": [
+        "Routing"
+    ],
+    "permissions": [
+        "routing:queue:view",
+        "routing:queue:edit",
+        "routing:queue:readonly",
+        "routing:queueMember:manage"
+    ],
+    "documentation": [],
+    "presentation": [
+        {
+            "title": "Page 1",
+            "schema": {
+                "title": "Data Action Setup",
+                "description": "Setup your data action deployment",
+                "type": "object",
+                "properties": [
+                    {
+                        "action_name": {
+                            "description": "The name for the data action",
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "action_category": {
+                            "description": "Category of action",
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "integration_id": {
+                            "description": "The ID of the integration this action is associated with.",
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "secure_data_action": {
+                            "description": "Indication of whether or not the action is designed to accept sensitive data.",
+                            "type": "boolean",
+                            "default": "false"
+                        }
+                    }
+                ],
+                "required": [
+                    "action_name",
+                    "action_category",
+                    "integration_id"
+                ]
+            }
+        }
+    ],
+    "results": {
+        "entities": [
+            {
+                "type": "dataAction",
+                "visibility": "VISIBLE"
+            },
+            {
+                "type": "integration",
+                "visibility": "VISIBLE"
+            }
+        ]
+    }
+}

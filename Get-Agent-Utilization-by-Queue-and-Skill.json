@@ -1,0 +1,98 @@
+{
+  "name": "Get Agent Utilization by Queue and Skill",
+  "integrationType": "purecloud-data-actions",
+  "actionType": "custom",
+  "config": {
+    "request": {
+      "requestUrlTemplate": "/api/v2/routing/queues/${input.QueueId}/members?skills=$esc.url(${input.Skills})&routingStatus=${input.RoutingStatus}&joined=true&expand=conversationSummary&pageSize=100&pageNumber=${input.PageNumber}",
+      "requestType": "GET",
+      "headers": {},
+      "requestTemplate": "${input.rawRequest}"
+    },
+    "response": {
+      "translationMap": {
+        "numAgents": "$.entities.size()",
+        "userIds": "$.entities[*].id",
+        "active": "$.entities[*].user.conversationSummary.message.contactCenter.active",
+        "acw": "$.entities[*].user.conversationSummary.message.contactCenter.acw",
+        "communicate": "$.entities[*].user.conversationSummary.message.enterprise.active"
+      },
+      "translationMapDefaults": {
+        "numAgents": "0",
+        "userIds": "[]",
+        "active": "[]",
+        "acw": "[]",
+        "communicate": "[]"
+      },
+      "successTemplate": "{ \"NumAgents\": ${numAgents}, \"UserIds\": ${userIds}, \"NumActive\": ${active}, \"NumAcw\": ${acw}, \"NumCommunicate\": ${communicate} }"
+    }
+  },
+  "contract": {
+    "input": {
+      "inputSchema": {
+        "$schema": "http://json-schema.org/draft-04/schema#",
+        "type": "object",
+        "required": ["QueueId", "RoutingStatus", "Skills", "PageNumber"],
+        "properties": {
+          "QueueId": {
+            "description": "Queue ID",
+            "type": "string"
+          },
+          "RoutingStatus": {
+            "description": "Routing status",
+            "type": "string"
+          },
+          "Skills": {
+            "description": "Skill names",
+            "type": "string"
+          },
+          "PageNumber": {
+            "default": "1",
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      }
+    },
+    "output": {
+      "successSchema": {
+        "$schema": "http://json-schema.org/draft-04/schema#",
+        "title": "Response",
+        "description": "Response",
+        "type": "object",
+        "properties": {
+          "NumAgents": {
+            "description": "Count of agents up to 100",
+            "type": "integer"
+          },
+          "UserIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "NumActive": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          },
+          "NumAcw": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          },
+          "NumCommunicate": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          }
+        },
+        "additionalProperties": true
+      }
+    }
+  },
+  "secure": false
+}
